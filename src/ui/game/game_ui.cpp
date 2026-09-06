@@ -67,17 +67,16 @@ void Interface::addButtons(PlayLayer* pl) {
     auto& ui = Interface::get();
 
     ui.buttonMenu = CCMenu::create();
-
     ui.buttonMenu->setPosition({0.f, 0.f});
     ui.buttonMenu->setZOrder(300);
 
     pl->addChild(ui.buttonMenu);
 
+    // --- STEP FRAME BUTTON ---
     ui.stepFrameBtn = Button::createWithSpriteFrameName(
         "GJ_arrow_02_001.png",
         [](auto) {
             auto& bot = Bot::get();
-
             if (!bot.frameStepper)
                 Bot::toggleFrameStepper();
             else
@@ -85,19 +84,24 @@ void Interface::addButtons(PlayLayer* pl) {
         }
     );
 
-    static_cast<CCSprite*>(
-        ui.stepFrameBtn->getDisplayNode()
-    )->setFlipX(true);
-
-    ui.stepFrameBtn->setAnchorPoint({0.f, 0.f});
+    // Menggunakan anchor point standar pusat (0.5, 0.5) agar hitbox sempurna di tengah
+    ui.stepFrameBtn->setAnchorPoint({0.5f, 0.5f});
+    
+    // Pastikan content size sesuai dengan ukuran sprite agar seluruh tombol bisa diklik
+    if (auto displayNode = ui.stepFrameBtn->getDisplayNode()) {
+        ui.stepFrameBtn->setContentSize(displayNode->getContentSize());
+        static_cast<CCSprite*>(displayNode)->setFlipX(true);
+        // Pindahkan posisi sprite internal ke tengah-tengah button
+        displayNode->setPosition(ui.stepFrameBtn->getContentSize() / 2);
+    }
 
     ui.buttonMenu->addChild(ui.stepFrameBtn);
 
+    // --- BACKSTEP FRAME BUTTON ---
     ui.backstepFrameBtn = Button::createWithSpriteFrameName(
         "GJ_arrow_02_001.png",
         [](auto) {
             auto& bot = Bot::get();
-
             if (!bot.frameStepper)
                 Bot::toggleFrameStepper();
             else
@@ -105,10 +109,15 @@ void Interface::addButtons(PlayLayer* pl) {
         }
     );
 
-    ui.backstepFrameBtn->setAnchorPoint({0.f, 0.f});
+    ui.backstepFrameBtn->setAnchorPoint({0.5f, 0.5f});
+    if (auto displayNode = ui.backstepFrameBtn->getDisplayNode()) {
+        ui.backstepFrameBtn->setContentSize(displayNode->getContentSize());
+        displayNode->setPosition(ui.backstepFrameBtn->getContentSize() / 2);
+    }
 
     ui.buttonMenu->addChild(ui.backstepFrameBtn);
 
+    // --- DISABLE STEPPER BUTTON ---
     ui.disableStepperBtn = Button::createWithSpriteFrameName(
         "GJ_deleteIcon_001.png",
         [](auto) {
@@ -117,10 +126,15 @@ void Interface::addButtons(PlayLayer* pl) {
         }
     );
 
-    ui.disableStepperBtn->setAnchorPoint({0.f, 0.f});
+    ui.disableStepperBtn->setAnchorPoint({0.5f, 0.5f});
+    if (auto displayNode = ui.disableStepperBtn->getDisplayNode()) {
+        ui.disableStepperBtn->setContentSize(displayNode->getContentSize());
+        displayNode->setPosition(ui.disableStepperBtn->getContentSize() / 2);
+    }
 
     ui.buttonMenu->addChild(ui.disableStepperBtn);
 
+    // --- SPEEDHACK BUTTON ---
     ui.speedhackBtn = Button::createWithSpriteFrameName(
         "GJ_timeIcon_001.png",
         [](auto) {
@@ -128,7 +142,11 @@ void Interface::addButtons(PlayLayer* pl) {
         }
     );
 
-    ui.speedhackBtn->setAnchorPoint({0.f, 0.f});
+    ui.speedhackBtn->setAnchorPoint({0.5f, 0.5f});
+    if (auto displayNode = ui.speedhackBtn->getDisplayNode()) {
+        ui.speedhackBtn->setContentSize(displayNode->getContentSize());
+        displayNode->setPosition(ui.speedhackBtn->getContentSize() / 2);
+    }
 
     ui.buttonMenu->addChild(ui.speedhackBtn);
 
